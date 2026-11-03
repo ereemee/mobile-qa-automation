@@ -5,7 +5,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 ## 기술 스택
 | 구분 | 사용 기술 |
 | --- | --- |
-| 언어 | Python <버전> |
+| 언어 | Python <6.0.12> |
 | 테스트 프레임워크 | pytest |
 | 모바일 자동화 | Appium 2 + UiAutomator2 driver, Appium-Python-Client |
 | 대기 처리 | Selenium `WebDriverWait` + `expected_conditions` (명시적 대기) |
