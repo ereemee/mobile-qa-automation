@@ -6,6 +6,7 @@ pytest 공통 설정 파일.
 import pytest
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
+from selenium.webdriver.support.ui import WebDriverWait
 
 APPIUM_SERVER = "http://127.0.0.1:4723"
 APP_PACKAGE = "com.saucelabs.mydemoapp.android"
@@ -25,7 +26,16 @@ def driver():
     options.set_capability("appium:uiautomator2ServerLaunchTimeout", 120000)
 
     drv = webdriver.Remote(APPIUM_SERVER, options=options)
-    drv.activate_app(APP_PACKAGE)  # 샘플 앱 실행 (이미 켜져 있으면 앞으로 가져옴)
+
+    # 이전 테스트가 끝난 화면(상세·장바구니 등)이 남지 않도록 앱을 껐다가 다시 실행
+    drv.terminate_app(APP_PACKAGE)
+    drv.activate_app(APP_PACKAGE)
+    # activate_app은 앱이 화면에 뜨기 전에 끝날 수 있으므로,
+    # 샘플 앱이 실제로 맨 앞 화면이 될 때까지 최대 15초 대기
+    WebDriverWait(drv, 15).until(
+        lambda d: d.current_package == APP_PACKAGE,
+        message=f"{APP_PACKAGE} 앱이 15초 안에 화면 맨 앞으로 오지 않음",
+    )
 
     yield drv  # 여기서 테스트가 실행됨
 
