@@ -41,7 +41,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 appium
 
 # 2) 테스트 실행 (프로젝트 폴더에서)
-cd C:\Users\hyeri\projects\mobile-qa-automation
+cd ~\projects\mobile-qa-automation
 python -m pytest
 
 # 특정 테스트만 실행
