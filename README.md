@@ -21,6 +21,8 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 
 모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 올 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
 
+테스트가 실패하면 `conftest.py`의 `pytest_runtest_makereport` hook이 그 순간의 에뮬레이터 화면을 캡처해 `screenshots/테스트이름_날짜시간.png`로 저장합니다. (`screenshots/`는 `.gitignore`로 커밋에서 제외)
+
 ## 사전 준비
 1. **Android SDK / 에뮬레이터**: Android Studio에서 에뮬레이터를 만들고 실행합니다. `adb devices`에서 `emulator-5554`가 보여야 합니다.
 2. **테스트 앱 설치**: 에뮬레이터에 Sauce Labs My Demo App(Android)을 설치합니다.
@@ -53,13 +55,14 @@ python -m pytest tests/test_app.py::test_add_to_cart
 ## 폴더 구조
 ```
 mobile-qa-automation/
-├── conftest.py        # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료)
+├── conftest.py        # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
 ├── pytest.ini         # pytest 설정 (testpaths, pythonpath, -v)
 ├── requirements.txt   # Python 의존성 (버전 고정)
 ├── tests/
 │   └── test_app.py    # 앱 실행 / 상품 상세 / 장바구니 테스트
 ├── docs/
 │   └── images/        # README용 실행 결과 이미지
+├── screenshots/       # 테스트 실패 시 자동 생성 (git 제외)
 ├── TODO.md            # 앞으로 할 일
 └── README.md
 ```

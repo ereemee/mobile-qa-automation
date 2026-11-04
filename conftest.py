@@ -7,6 +7,8 @@ import pytest
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from selenium.webdriver.support.ui import WebDriverWait
+import os
+from datetime import datetime
 
 APPIUM_SERVER = "http://127.0.0.1:4723"
 APP_PACKAGE = "com.saucelabs.mydemoapp.android"
@@ -36,7 +38,18 @@ def driver():
         lambda d: d.current_package == APP_PACKAGE,
         message=f"{APP_PACKAGE} 앱이 15초 안에 화면 맨 앞으로 오지 않음",
     )
-
     yield drv  # 여기서 테스트가 실행됨
 
     drv.quit()  # 테스트가 끝나면 세션 종료
+
+
+@pytest.hookimpl(wrapper=True)
+def pytest_runtest_makereport(item, call):
+    report = yield  # 테스트 결과(report)를 받음
+    if report.when == "call" and report.failed:
+        drv = item.funcargs.get("driver")
+        if drv is not None:
+            os.makedirs("screenshots", exist_ok=True)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            drv.save_screenshot(f"screenshots/{item.name}_{ts}.png")
+    return report
