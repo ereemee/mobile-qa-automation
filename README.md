@@ -1,5 +1,7 @@
 # mobile-qa-automation
 
+![lint](https://github.com/ereemee/mobile-qa-automation/actions/workflows/lint.yml/badge.svg)
+
 Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 주요 사용자 흐름을 Android 에뮬레이터에서 자동화 테스트하는 프로젝트입니다.
 
 ## 기술 스택
@@ -11,6 +13,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | 대기 처리 | Selenium `WebDriverWait` + `expected_conditions` (명시적 대기) |
 | 테스트 대상 | Sauce Labs My Demo App (`com.saucelabs.mydemoapp.android`) |
 | 실행 환경 | Windows, PowerShell, Android Emulator (`emulator-5554`) |
+| 코드 품질 / CI | ruff (lint·포맷 검사), GitHub Actions |
 
 ## 테스트 범위
 | 테스트 | 검증 내용 |
@@ -54,12 +57,34 @@ python -m pytest tests/test_app.py::test_add_to_cart
 > `pytest.ini`에 `testpaths = tests`, `addopts = -v`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행됩니다.
 > Appium Inspector 세션이 열려 있으면 테스트 세션과 충돌하므로, 실행 전에 Inspector 세션을 닫아 주세요.
 
+## 코드 품질 (lint / CI)
+`main` 브랜치에 push하거나 Pull Request를 만들면 GitHub Actions(`.github/workflows/lint.yml`)가 ruff로 lint와 포맷을 자동으로 검사합니다. Appium 테스트는 에뮬레이터가 필요하므로 CI에서는 정적 검사만 실행합니다.
+
+```powershell
+# 개발용 도구 설치
+python -m pip install -r requirements-dev.txt
+
+# 로컬에서 검사 (CI와 같은 명령)
+python -m ruff check .
+python -m ruff format --check .
+
+# 자동 수정
+python -m ruff format .
+python -m ruff check --fix .
+```
+> 검사 규칙은 `ruff.toml`에 설정되어 있습니다. (`E`, `F`, `I` 규칙, 한 줄 최대 100자)
+
 ## 폴더 구조
 ```
 mobile-qa-automation/
+├── .github/
+│   └── workflows/
+│       └── lint.yml   # GitHub Actions: push·PR 시 ruff lint·포맷 검사
 ├── conftest.py        # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
 ├── pytest.ini         # pytest 설정 (testpaths, pythonpath, -v)
+├── ruff.toml          # ruff 검사 규칙 설정
 ├── requirements.txt   # Python 의존성 (버전 고정)
+├── requirements-dev.txt # 개발용 도구 (ruff, 버전 고정)
 ├── tests/
 │   ├── test_app.py    # 앱 실행 / 상품 상세 / 장바구니 테스트
 │   └── test_login.py  # 로그인 성공 / 실패 테스트
@@ -100,4 +125,4 @@ mobile-qa-automation/
 - **해결**: 화면 이동은 에뮬레이터에서 직접 하고, pytest 실행 전에는 Inspector 세션을 닫음
 
 ## 앞으로 할 일
-[TODO.md](TODO.md) 참고 — 로그인·결제 흐름 테스트, Page Object Model 리팩터링, 실패 시 스크린샷 저장, 리포트, CI 자동화, 클라우드 디바이스 팜 연동 예정
+[TODO.md](TODO.md) 참고 — 결제(Checkout) 흐름 테스트, 로그인 실패 케이스 확장, Page Object Model 리팩터링, locator·테스트 데이터 분리, pytest-html 리포트, 클라우드 디바이스 팜 연동 예정

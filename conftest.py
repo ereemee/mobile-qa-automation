@@ -3,12 +3,14 @@ pytest 공통 설정 파일.
 여기서 만든 driver fixture를 모든 테스트가 함께 사용한다.
 (Selenium의 setUp / tearDown 역할)
 """
+
+import os
+from datetime import datetime
+
 import pytest
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from selenium.webdriver.support.ui import WebDriverWait
-import os
-from datetime import datetime
 
 APPIUM_SERVER = "http://127.0.0.1:4723"
 APP_PACKAGE = "com.saucelabs.mydemoapp.android"

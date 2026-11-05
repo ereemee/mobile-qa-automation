@@ -11,13 +11,13 @@
 - [x] 실패 시 스크린샷 자동 저장 (conftest hook)
 - [x] 로그인 테스트 (성공 케이스)
 - [x] 로그인 실패(빈 아이디) 에러 메시지 검증
+- [x] GitHub Actions로 lint(ruff) 자동 검사
 
 ## 다음 할 일
 - [ ] 장바구니 → 결제(Checkout) 흐름 테스트
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
 - [ ] locator·테스트 데이터 분리
 - [ ] pytest-html 리포트 생성
-- [ ] GitHub Actions로 lint(ruff) 자동 검사
 - [ ] AWS Device Farm 등 클라우드 디바이스 팜 연동 검토
 - [ ] 로그인 상태 초기화 방법 정리 (no_reset과 로그아웃 처리)
 - [ ] 잠금 계정 로그인 실패 케이스 추가

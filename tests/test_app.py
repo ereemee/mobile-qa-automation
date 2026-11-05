@@ -27,15 +27,11 @@ def test_open_product_detail(driver):
     """첫 번째 상품을 눌러 상세 화면의 장바구니 버튼이 보이는지 확인"""
     wait = WebDriverWait(driver, 10)  # 최대 10초 명시적 대기
 
-    products = wait.until(
-        EC.presence_of_all_elements_located((AppiumBy.ID, PRODUCT_ID))
-    )
+    products = wait.until(EC.presence_of_all_elements_located((AppiumBy.ID, PRODUCT_ID)))
     assert len(products) > 0, "상품 목록이 비어 있음"
     products[0].click()
 
-    add_button = wait.until(
-        EC.visibility_of_element_located((AppiumBy.ID, ADD_TO_CART_ID))
-    )
+    add_button = wait.until(EC.visibility_of_element_located((AppiumBy.ID, ADD_TO_CART_ID)))
     assert add_button.is_displayed()
 
 
