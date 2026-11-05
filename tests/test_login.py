@@ -9,7 +9,11 @@ USERNAME_ID = PKG + "nameET"
 PASSWORD_ID = PKG + "passwordET"  
 LOGIN_BTN_ID = PKG + "loginBtn"
 PRODUCT_ID = PKG + "productIV"
+NAME_ERROR_ID = PKG + "nameErrorTV"
 
+
+
+    
 def open_login_screen(driver):
     wait = WebDriverWait(driver, 10)
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, MENU_ID))).click()
@@ -29,9 +33,16 @@ def test_login_success(driver):
     # 로그인 성공 → 상품 목록 화면으로 이동
     assert wait.until(EC.presence_of_all_elements_located((AppiumBy.ID, PRODUCT_ID)))
 
-        
 def test_login_empty_username(driver):
     """아이디 없이 로그인하면 에러 메시지가 보이는지 확인"""
     wait = open_login_screen(driver)
     driver.find_element(AppiumBy.ID, LOGIN_BTN_ID).click()
     # TODO: Inspector에서 확인한 에러 메시지 ID/text로 검증
+    
+def test_login_empty_username(driver):
+    """아이디 없이 로그인하면 'Username is required' 에러 메시지가 보이는지 확인"""
+    wait = open_login_screen(driver)
+    wait.until(EC.element_to_be_clickable((AppiumBy.ID, LOGIN_BTN_ID))).click()
+    # nameErrorTV는 처음부터 있지만 invisible → visibility로 기다림
+    error = wait.until(EC.visibility_of_element_located((AppiumBy.ID, NAME_ERROR_ID)))
+    assert error.text == "Username is required"
