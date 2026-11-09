@@ -23,6 +23,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | `test_add_to_cart` | 상품을 장바구니에 담으면 장바구니 뱃지 숫자가 담기 전보다 1 늘어나는지 확인 |
 | `test_login_success` | 메뉴 → Log In 화면에서 올바른 계정으로 로그인하면 상품 목록 화면으로 이동하는지 확인 |
 | `test_login_empty_username` | 아이디 없이 Login을 누르면 "Username is required" 에러 메시지가 보이는지 확인 |
+| `test_checkout_requires_login` | 비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인 |
 
 모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 올 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
 
@@ -88,6 +89,7 @@ mobile-qa-automation/
 ├── tests/
 │   ├── test_app.py    # 앱 실행 / 상품 상세 / 장바구니 테스트
 │   └── test_login.py  # 로그인 성공 / 실패 테스트
+│   └── test_checkout.py # 결제 흐름 테스트
 ├── docs/
 │   └── images/        # README용 실행 결과 이미지
 ├── screenshots/       # 테스트 실패 시 자동 생성 (git 제외)
