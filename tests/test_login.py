@@ -1,6 +1,7 @@
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
 from conftest import APP_PACKAGE
 
 PKG = "com.saucelabs.mydemoapp.android:id/"
@@ -11,6 +12,7 @@ LOGIN_BTN_ID = PKG + "loginBtn"
 PRODUCT_ID = PKG + "productIV"
 NAME_ERROR_ID = PKG + "nameErrorTV"
 PASSWORD_ERROR_ID = PKG + "passwordErrorTV"
+
 
 def open_login_screen(driver):
     wait = WebDriverWait(driver, 10)
@@ -42,6 +44,7 @@ def test_login_empty_username(driver):
     # nameErrorTV는 처음부터 있지만 invisible → visibility로 기다림
     error = wait.until(EC.visibility_of_element_located((AppiumBy.ID, NAME_ERROR_ID)))
     assert error.text == "Username is required"
+
 
 def login(driver, wait, username, password):
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, USERNAME_ID))).send_keys(username)

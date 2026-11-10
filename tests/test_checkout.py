@@ -27,5 +27,12 @@ def test_checkout_requires_login(driver):
     wait.until(EC.visibility_of_element_located((AppiumBy.ID, CART_LIST_ID)))
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, PROCEED_ID))).click()
 
-    # TODO: 로그인 입력 (test_login_success와 같은 순서)
-    # TODO: FULL_NAME_ID가 보이는지 assert
+    # 결제 진행 시 로그인 화면이 뜸 → 로그인
+    username = wait.until(EC.element_to_be_clickable((AppiumBy.ID, USERNAME_ID)))
+    username.send_keys("bod@example.com")
+    driver.find_element(AppiumBy.ID, PASSWORD_ID).send_keys("10203040")
+    driver.find_element(AppiumBy.ID, LOGIN_BTN_ID).click()
+
+    # 로그인 후 배송지 입력 화면(Full Name 입력란)으로 이동했는지 확인
+    full_name = wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ID)))
+    assert full_name.is_displayed()
