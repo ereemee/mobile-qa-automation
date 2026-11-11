@@ -7,7 +7,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 ## 기술 스택
 | 구분 | 사용 기술 |
 | --- | --- |
-| 언어 | Python 3.15 |
+| 언어 | Python 3.15.2 |
 | 테스트 프레임워크 | pytest |
 | 모바일 자동화 | Appium + UiAutomator2 driver, Appium-Python-Client |
 | 대기 처리 | Selenium `WebDriverWait` + `expected_conditions` (명시적 대기) |
@@ -26,6 +26,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | `test_checkout_requires_login` | 비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인 |
 | `test_login_locked_account` | 잠긴 계정으로 로그인하면 "Sorry this user has been locked out." 에러 메시지가 보이는지 확인 |
 | `test_login_state_resets_after_restart` | 로그인 후 앱을 재시작하면 로그아웃 상태(메뉴에 Log In 표시)로 돌아오는지 확인 |
+| `test_shipping_to_payment` | 로그인 후 배송지를 입력하고 To Payment를 누르면 결제 정보(카드 번호 입력) 화면으로 이동하는지 확인 |
 
 모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 올 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
 
@@ -89,9 +90,9 @@ mobile-qa-automation/
 ├── requirements.txt   # Python 의존성 (버전 고정)
 ├── requirements-dev.txt # 개발용 도구 (ruff, 버전 고정)
 ├── tests/
-│   ├── test_app.py    # 앱 실행 / 상품 상세 / 장바구니 테스트
-│   └── test_login.py  # 로그인 성공 / 실패 테스트
-│   └── test_checkout.py # 결제 흐름 테스트
+│   ├── test_app.py      # 앱 실행 / 상품 상세 / 장바구니 테스트
+│   ├── test_login.py    # 로그인 성공 / 실패 / 잠금 계정 / 재시작 테스트
+│   └── test_checkout.py # 결제 흐름 테스트 (로그인 → 배송지 → 결제 정보)
 ├── docs/
 │   └── images/        # README용 실행 결과 이미지
 ├── screenshots/       # 테스트 실패 시 자동 생성 (git 제외)

@@ -16,17 +16,15 @@
 - [x] 비로그인 결제 진입 → 로그인 → 배송지 화면 이동 테스트
 - [x] 잠금 계정 로그인 실패 케이스 추가
 - [x] 로그인 상태 초기화 방법 정리 (terminate_app 후 Log In 상태로 돌아오는지 테스트로 확인)
+- [x] 결제 2단계: 배송지 입력 → To Payment → 결제 정보 화면 (go_to_shipping 헬퍼 분리)
 
 ## 다음 할 일
-- [ ] 장바구니 → 결제(Checkout) 흐름 테스트
-- [ ] 결제 2단계: 배송지 입력 → To Payment → 결제 정보 화면
 - [ ] 결제 3단계: 결제 정보 입력 → 주문 확인 → Checkout Complete 검증
 - [ ] 배송지 필수값 미입력 에러 메시지 검증
 - [ ] 로그인 상태로 결제 진입 시 로그인 화면 없이 배송지로 이동하는지 검증
+- [ ] 공통 locator(PKG, 로그인 id 등)를 한 곳으로 모으기 (test_login.py·test_checkout.py 중복)
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
 - [ ] locator·테스트 데이터 분리
 - [ ] pytest-html 리포트 생성
-- [ ] AWS Device Farm 등 클라우드 디바이스 팜 연동 검토
-- [ ] 로그인 상태 초기화 방법 정리 (no_reset과 로그아웃 처리)
-- [ ] 잠금 계정 로그인 실패 케이스 추가
 - [ ] 실패 스크린샷을 pytest-html 리포트에 첨부
+- [ ] AWS Device Farm 등 클라우드 디바이스 팜 연동 검토
