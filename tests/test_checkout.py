@@ -19,6 +19,10 @@ ZIP_ID = PKG + "zipET"
 COUNTRY_ID = PKG + "countryET"
 TO_PAYMENT_ID = PKG + "paymentBtn"  # 배송지 화면의 To Payment
 CARD_NUMBER_ID = PKG + "cardNumberET"  # 결제 화면 카드 번호 입력란
+CARD_NAME_ID = PKG + "nameET"  # 결제 화면 카드 소유자 이름 (Inspector로 확인)
+EXPIRATION_ID = PKG + "expirationDateET"  # 유효기간 (Inspector로 확인)
+CVV_ID = PKG + "securityCodeET"  # CVV (Inspector로 확인)
+   
 
 def test_checkout_requires_login(driver):
     """비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인"""
@@ -43,24 +47,53 @@ def go_to_shipping(driver):
     driver.find_element(AppiumBy.ID, LOGIN_BTN_ID).click()
     return wait
 
+def scroll_to_text(driver, text):
+       """화면을 스크롤해서 text가 보이게 하고 그 요소를 돌려준다"""
+       if driver.is_keyboard_shown():
+           driver.hide_keyboard()
+       return driver.find_element(
+           AppiumBy.ANDROID_UIAUTOMATOR,
+           "new UiScrollable(new UiSelector().scrollable(true))"
+           f'.scrollIntoView(new UiSelector().text("{text}"))',
+       )
+
+
+def fill_shipping(driver, wait):
+       """배송지를 입력하고 To Payment를 눌러 결제 정보 화면으로 이동한다"""
+       wait.until(EC.element_to_be_clickable((AppiumBy.ID, FULL_NAME_ID))).send_keys("Rebecca Winter")
+       driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys("Mandorley 112")
+       driver.find_element(AppiumBy.ID, CITY_ID).send_keys("Truro")
+       driver.find_element(AppiumBy.ID, ZIP_ID).send_keys("89750")
+       driver.find_element(AppiumBy.ID, COUNTRY_ID).send_keys("United Kingdom")
+       scroll_to_text(driver, "To Payment")
+       driver.find_element(AppiumBy.ID, TO_PAYMENT_ID).click()
+
+
 def test_shipping_to_payment(driver):
-    """배송지를 입력하고 To Payment를 누르면 결제 정보 화면으로 이동하는지 확인"""
-    wait = go_to_shipping(driver)
-    wait.until(EC.element_to_be_clickable((AppiumBy.ID, FULL_NAME_ID))).send_keys("Rebecca Winter")
-    driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys("Mandorley 112")
-    driver.find_element(AppiumBy.ID, CITY_ID).send_keys("Truro")
-    driver.find_element(AppiumBy.ID, ZIP_ID).send_keys("89750")
-    driver.find_element(AppiumBy.ID, COUNTRY_ID).send_keys("United Kingdom")
+       """배송지를 입력하고 To Payment를 누르면 결제 정보 화면으로 이동하는지 확인"""
+       wait = go_to_shipping(driver)
+       fill_shipping(driver, wait)
+       card = wait.until(EC.visibility_of_element_located((AppiumBy.ID, CARD_NUMBER_ID)))
+       assert card.is_displayed()
 
-    # 키보드가 To Payment 버튼을 가릴 수 있으니 닫고, 버튼이 보일 때까지 스크롤
-    if driver.is_keyboard_shown():
-        driver.hide_keyboard()
-    driver.find_element(
-        AppiumBy.ANDROID_UIAUTOMATOR,
-        "new UiScrollable(new UiSelector().scrollable(true))"
-        '.scrollIntoView(new UiSelector().text("To Payment"))',
-    )
-    driver.find_element(AppiumBy.ID, TO_PAYMENT_ID).click()
 
-    card = wait.until(EC.visibility_of_element_located((AppiumBy.ID, CARD_NUMBER_ID)))
-    assert card.is_displayed()
+def test_checkout_complete(driver):
+       """결제 정보를 입력하고 주문하면 Checkout Complete 화면이 보이는지 확인"""
+       wait = go_to_shipping(driver)
+       fill_shipping(driver, wait)
+
+       wait.until(EC.element_to_be_clickable((AppiumBy.ID, CARD_NAME_ID))).send_keys("Rebecca Winter")
+       driver.find_element(AppiumBy.ID, CARD_NUMBER_ID).send_keys("3258125675687891")
+       driver.find_element(AppiumBy.ID, EXPIRATION_ID).send_keys("0330")
+       driver.find_element(AppiumBy.ID, CVV_ID).send_keys("123")
+
+       scroll_to_text(driver, "Review Order").click()
+       wait.until(
+           EC.element_to_be_clickable(
+               (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("Place Order")')
+           )
+       ).click()
+
+       complete = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Checkout Complete")')
+       assert wait.until(EC.visibility_of_element_located(complete))
+       
