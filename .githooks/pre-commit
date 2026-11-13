@@ -1,0 +1,7 @@
+#!/bin/sh
+# 커밋 전 ruff 검사 (GitHub Actions lint.yml과 같은 명령)
+python -m ruff check . || exit 1
+python -m ruff format --check . || {
+  echo "포맷이 맞지 않습니다. python -m ruff format . 실행 후 다시 git add 하세요."
+  exit 1
+   }

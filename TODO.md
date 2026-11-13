@@ -19,6 +19,7 @@
 - [x] 결제 2단계: 배송지 입력 → To Payment → 결제 정보 화면 (go_to_shipping 헬퍼 분리)
 - [x] 결제 3단계: 결제 정보 입력 → 주문 확인 → Checkout Complete 검증
 - [x] ruff format 오류 수정 (test_checkout.py), 배송지 입력 fill_shipping 헬퍼 분리
+- [x] 커밋 전 ruff 자동 실행 (pre-commit hook)
 
 ## 다음 할 일
 - [ ] 배송지 필수값 미입력 에러 메시지 검증
@@ -31,4 +32,3 @@
 - [ ] AWS Device Farm 등 클라우드 디바이스 팜 연동 검토
 - [ ] 결제 정보 필수값 미입력(카드 번호 등) 에러 메시지 검증
 - [ ] go_to_shipping·fill_shipping 헬퍼를 pages/ 로 옮기기 (POM 리팩터링 첫 단계)
-- [ ] 커밋 전 ruff 자동 실행 (pre-commit hook)

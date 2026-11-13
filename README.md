@@ -79,12 +79,20 @@ python -m ruff check --fix .
 ```
 > 검사 규칙은 `ruff.toml`에 설정되어 있습니다. (`E`, `F`, `I` 규칙, 한 줄 최대 100자)
 
+### 커밋 전 자동 검사 (git hook)
+```powershell
+git config core.hooksPath .githooks   # 최초 1회
+```
+`git commit`을 하면 `.githooks/pre-commit`이 ruff check와 ruff format --check를 먼저 실행하고, 실패하면 커밋이 멈춥니다.
+   
 ## 폴더 구조
 ```
 mobile-qa-automation/
 ├── .github/
 │   └── workflows/
 │       └── lint.yml   # GitHub Actions: push·PR 시 ruff lint·포맷 검사
+├── .githooks/
+│   ├── pre-commit # 커밋 전 ruff 검사 hook
 ├── conftest.py        # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
 ├── pytest.ini         # pytest 설정 (testpaths, pythonpath, -v)
 ├── ruff.toml          # ruff 검사 규칙 설정
