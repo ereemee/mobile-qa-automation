@@ -3,15 +3,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from conftest import APP_PACKAGE
-
-PKG = "com.saucelabs.mydemoapp.android:id/"
-MENU_ID = PKG + "menuIV"
-USERNAME_ID = PKG + "nameET"
-PASSWORD_ID = PKG + "passwordET"
-LOGIN_BTN_ID = PKG + "loginBtn"
-PRODUCT_ID = PKG + "productIV"
-NAME_ERROR_ID = PKG + "nameErrorTV"
-PASSWORD_ERROR_ID = PKG + "passwordErrorTV"
+from locators import (
+    LOGIN_BTN_ID,
+    MENU_ID,
+    NAME_ERROR_ID,
+    PASSWORD_ERROR_ID,
+    PASSWORD_ID,
+    PRODUCT_ID,
+    USERNAME_ID,
+)
 
 
 def open_login_screen(driver):

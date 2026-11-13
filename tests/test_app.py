@@ -3,11 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from conftest import APP_PACKAGE
-
-# Appium Inspector / page source로 확인한 resource-id
-PRODUCT_ID = "com.saucelabs.mydemoapp.android:id/productIV"
-ADD_TO_CART_ID = "com.saucelabs.mydemoapp.android:id/cartBt"
-CART_BADGE_ID = "com.saucelabs.mydemoapp.android:id/cartTV"
+from locators import ADD_TO_CART_ID, CART_BADGE_ID, PRODUCT_ID
 
 
 def get_cart_count(driver):

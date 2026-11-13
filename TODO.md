@@ -20,11 +20,11 @@
 - [x] 결제 3단계: 결제 정보 입력 → 주문 확인 → Checkout Complete 검증
 - [x] ruff format 오류 수정 (test_checkout.py), 배송지 입력 fill_shipping 헬퍼 분리
 - [x] 커밋 전 ruff 자동 실행 (pre-commit hook)
+- [x] 공통 locator(PKG, 로그인 id 등)를 한 곳으로 모으기 (test_login.py·test_checkout.py 중복)
 
 ## 다음 할 일
 - [ ] 배송지 필수값 미입력 에러 메시지 검증
 - [ ] 로그인 상태로 결제 진입 시 로그인 화면 없이 배송지로 이동하는지 검증
-- [ ] 공통 locator(PKG, 로그인 id 등)를 한 곳으로 모으기 (test_login.py·test_checkout.py 중복)
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
 - [ ] locator·테스트 데이터 분리
 - [ ] pytest-html 리포트 생성

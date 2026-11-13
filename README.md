@@ -94,6 +94,7 @@ mobile-qa-automation/
 ├── .githooks/
 │   ├── pre-commit # 커밋 전 ruff 검사 hook
 ├── conftest.py        # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
+├── locators.py        # 공통 locator(resource-id) 모음
 ├── pytest.ini         # pytest 설정 (testpaths, pythonpath, -v)
 ├── ruff.toml          # ruff 검사 규칙 설정
 ├── requirements.txt   # Python 의존성 (버전 고정)

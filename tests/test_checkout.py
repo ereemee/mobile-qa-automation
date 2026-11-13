@@ -2,26 +2,27 @@ from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-PKG = "com.saucelabs.mydemoapp.android:id/"
-PRODUCT_ID = PKG + "productIV"
-ADD_TO_CART_ID = PKG + "cartBt"  # 상세 화면의 Add To Cart
-CART_BADGE_ID = PKG + "cartTV"
-CART_ICON_ID = PKG + "cartRL"
-CART_LIST_ID = PKG + "productRV"
-PROCEED_ID = PKG + "cartBt"  # 장바구니 화면의 Proceed To Checkout (상세 화면과 id가 같음)
-USERNAME_ID = PKG + "nameET"
-PASSWORD_ID = PKG + "passwordET"
-LOGIN_BTN_ID = PKG + "loginBtn"
-FULL_NAME_ID = PKG + "fullNameET"
-ADDRESS1_ID = PKG + "address1ET"
-CITY_ID = PKG + "cityET"
-ZIP_ID = PKG + "zipET"
-COUNTRY_ID = PKG + "countryET"
-TO_PAYMENT_ID = PKG + "paymentBtn"  # 배송지 화면의 To Payment
-CARD_NUMBER_ID = PKG + "cardNumberET"  # 결제 화면 카드 번호 입력란
-CARD_NAME_ID = PKG + "nameET"  # 결제 화면 카드 소유자 이름 (Inspector로 확인)
-EXPIRATION_ID = PKG + "expirationDateET"  # 유효기간 (Inspector로 확인)
-CVV_ID = PKG + "securityCodeET"  # CVV (Inspector로 확인)
+from locators import (
+    ADD_TO_CART_ID,
+    ADDRESS1_ID,
+    CARD_NAME_ID,
+    CARD_NUMBER_ID,
+    CART_BADGE_ID,
+    CART_ICON_ID,
+    CART_LIST_ID,
+    CITY_ID,
+    COUNTRY_ID,
+    CVV_ID,
+    EXPIRATION_ID,
+    FULL_NAME_ID,
+    LOGIN_BTN_ID,
+    PASSWORD_ID,
+    PROCEED_ID,
+    PRODUCT_ID,
+    TO_PAYMENT_ID,
+    USERNAME_ID,
+    ZIP_ID,
+)
 
 
 def test_checkout_requires_login(driver):
