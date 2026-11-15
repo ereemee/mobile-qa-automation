@@ -10,9 +10,14 @@ from datetime import datetime
 import pytest
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
+from appium.webdriver.common.appiumby import AppiumBy
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-APPIUM_SERVER = "http://127.0.0.1:4723"
+from locators import PRODUCT_ID
+
+APPIUM_SERVER = os.getenv("APPIUM_SERVER", "http://127.0.0.1:4723")
+DEVICE_NAME = os.getenv("DEVICE_NAME", "emulator-5554")
 APP_PACKAGE = "com.saucelabs.mydemoapp.android"
 
 
@@ -20,7 +25,7 @@ APP_PACKAGE = "com.saucelabs.mydemoapp.android"
 def driver():
     # Inspector에 넣었던 capability와 같은 값
     options = UiAutomator2Options()
-    options.device_name = "emulator-5554"
+    options.device_name = DEVICE_NAME
     options.no_reset = True  # 테스트 때마다 앱 데이터를 지우지 않음
     # 일부 에뮬레이터에서 Hidden API 설정 변경이 막혀 세션 생성이 실패하는 문제 우회
     options.set_capability("appium:ignoreHiddenApiPolicyError", True)
@@ -39,6 +44,12 @@ def driver():
     WebDriverWait(drv, 15).until(
         lambda d: d.current_package == APP_PACKAGE,
         message=f"{APP_PACKAGE} 앱이 15초 안에 화면 맨 앞으로 오지 않음",
+    )
+    # 앱이 맨 앞에 와도 상품 목록이 늦게 그려질 수 있으므로,
+    # 첫 화면(상품 이미지)이 나타날 때까지 기다린 뒤 테스트 시작
+    WebDriverWait(drv, 20).until(
+        EC.presence_of_all_elements_located((AppiumBy.ID, PRODUCT_ID)),
+        message="상품 목록이 20초 안에 나타나지 않음",
     )
     yield drv  # 여기서 테스트가 실행됨
 

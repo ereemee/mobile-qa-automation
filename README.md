@@ -7,7 +7,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 ## 기술 스택
 | 구분 | 사용 기술 |
 | --- | --- |
-| 언어 | Python 3.15.2 |
+| 언어 | Python 3.12 이상 |
 | 테스트 프레임워크 | pytest |
 | 모바일 자동화 | Appium + UiAutomator2 driver, Appium-Python-Client |
 | 대기 처리 | Selenium `WebDriverWait` + `expected_conditions` (명시적 대기) |
@@ -48,18 +48,28 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
    ```
 
 ## 실행 방법
-```powershell
+​```powershell
 # 1) Appium 서버 실행 (별도 PowerShell 창, 기본 주소 http://127.0.0.1:4723)
 appium
 
 # 2) 테스트 실행 (프로젝트 폴더에서)
-cd C:\Users\hyeri\projects\mobile-qa-automation
+cd mobile-qa-automation
 python -m pytest
 
 # 특정 테스트만 실행
 python -m pytest tests/test_app.py::test_add_to_cart
-```
+
+# 다른 에뮬레이터/기기, 다른 Appium 포트에서 실행할 때
+appium -p 4724                                   # (별도 창) 4724 포트로 서버 실행
+$env:DEVICE_NAME = "emulator-5556"
+$env:APPIUM_SERVER = "http://127.0.0.1:4724"
+python -m pytest
+
+# 환경변수를 지워서 기본값으로 되돌리기
+Remove-Item Env:DEVICE_NAME, Env:APPIUM_SERVER
+​```
 > `pytest.ini`에 `testpaths = tests`, `addopts = -v`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행됩니다.
+> 환경변수 `DEVICE_NAME`, `APPIUM_SERVER`를 지정하지 않으면 기본값(`emulator-5554`, `http://127.0.0.1:4723`)으로 실행됩니다.
 > Appium Inspector 세션이 열려 있으면 테스트 세션과 충돌하므로, 실행 전에 Inspector 세션을 닫아 주세요.
 
 ## 코드 품질 (lint / CI)
