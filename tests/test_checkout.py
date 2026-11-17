@@ -23,13 +23,7 @@ from locators import (
     USERNAME_ID,
     ZIP_ID,
 )
-
-
-def test_checkout_requires_login(driver):
-    """비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인"""
-    wait = go_to_shipping(driver)
-    full_name = wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ID)))
-    assert full_name.is_displayed()
+from testdata import PAYMENT, SHIPPING, VALID_USER
 
 
 def go_to_shipping(driver):
@@ -44,8 +38,8 @@ def go_to_shipping(driver):
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, PROCEED_ID))).click()
 
     username = wait.until(EC.element_to_be_clickable((AppiumBy.ID, USERNAME_ID)))
-    username.send_keys("bod@example.com")
-    driver.find_element(AppiumBy.ID, PASSWORD_ID).send_keys("10203040")
+    username.send_keys(VALID_USER["username"])
+    driver.find_element(AppiumBy.ID, PASSWORD_ID).send_keys(VALID_USER["password"])
     driver.find_element(AppiumBy.ID, LOGIN_BTN_ID).click()
     return wait
 
@@ -64,12 +58,20 @@ def scroll_to_text(driver, text):
 def fill_shipping(driver, wait):
     """배송지를 입력하고 To Payment를 눌러 결제 정보 화면으로 이동한다"""
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, FULL_NAME_ID))).send_keys("Rebecca Winter")
-    driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys("Mandorley 112")
-    driver.find_element(AppiumBy.ID, CITY_ID).send_keys("Truro")
-    driver.find_element(AppiumBy.ID, ZIP_ID).send_keys("89750")
-    driver.find_element(AppiumBy.ID, COUNTRY_ID).send_keys("United Kingdom")
+    driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys(SHIPPING["full_name"])
+    driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys(SHIPPING["address1"])
+    driver.find_element(AppiumBy.ID, CITY_ID).send_keys(SHIPPING["city"])
+    driver.find_element(AppiumBy.ID, ZIP_ID).send_keys(SHIPPING["zip"])
+    driver.find_element(AppiumBy.ID, COUNTRY_ID).send_keys(SHIPPING["country"])
     scroll_to_text(driver, "To Payment")
     driver.find_element(AppiumBy.ID, TO_PAYMENT_ID).click()
+
+
+def test_checkout_requires_login(driver):
+    """비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인"""
+    wait = go_to_shipping(driver)
+    full_name = wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ID)))
+    assert full_name.is_displayed()
 
 
 def test_shipping_to_payment(driver):
@@ -85,10 +87,10 @@ def test_checkout_complete(driver):
     wait = go_to_shipping(driver)
     fill_shipping(driver, wait)
 
-    wait.until(EC.element_to_be_clickable((AppiumBy.ID, CARD_NAME_ID))).send_keys("Rebecca Winter")
-    driver.find_element(AppiumBy.ID, CARD_NUMBER_ID).send_keys("3258125675687891")
-    driver.find_element(AppiumBy.ID, EXPIRATION_ID).send_keys("0330")
-    driver.find_element(AppiumBy.ID, CVV_ID).send_keys("123")
+    wait.until(EC.element_to_be_clickable((AppiumBy.ID, CARD_NAME_ID))).send_keys(PAYMENT["name"])
+    driver.find_element(AppiumBy.ID, CARD_NUMBER_ID).send_keys(PAYMENT["card_number"])
+    driver.find_element(AppiumBy.ID, EXPIRATION_ID).send_keys(PAYMENT["expiration"])
+    driver.find_element(AppiumBy.ID, CVV_ID).send_keys(PAYMENT["cvv"])
 
     scroll_to_text(driver, "Review Order").click()
     wait.until(
