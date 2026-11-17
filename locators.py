@@ -30,6 +30,7 @@ CITY_ID = PKG + "cityET"
 ZIP_ID = PKG + "zipET"
 COUNTRY_ID = PKG + "countryET"
 TO_PAYMENT_ID = PKG + "paymentBtn"  # 배송지 화면의 To Payment
+FULL_NAME_ERROR_ID = PKG + "fullNameErrorTV"
 
 # 결제 정보
 CARD_NUMBER_ID = PKG + "cardNumberET"

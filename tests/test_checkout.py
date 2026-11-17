@@ -14,6 +14,7 @@ from locators import (
     COUNTRY_ID,
     CVV_ID,
     EXPIRATION_ID,
+    FULL_NAME_ERROR_ID,
     FULL_NAME_ID,
     LOGIN_BTN_ID,
     PASSWORD_ID,
@@ -23,7 +24,7 @@ from locators import (
     USERNAME_ID,
     ZIP_ID,
 )
-from testdata import PAYMENT, SHIPPING, VALID_USER
+from testdata import MSG_FULL_NAME_REQUIRED, PAYMENT, SHIPPING, VALID_USER
 
 
 def go_to_shipping(driver):
@@ -57,7 +58,9 @@ def scroll_to_text(driver, text):
 
 def fill_shipping(driver, wait):
     """배송지를 입력하고 To Payment를 눌러 결제 정보 화면으로 이동한다"""
-    wait.until(EC.element_to_be_clickable((AppiumBy.ID, FULL_NAME_ID))).send_keys("Rebecca Winter")
+    wait.until(EC.element_to_be_clickable((AppiumBy.ID, FULL_NAME_ID))).send_keys(
+        SHIPPING["full_name"]
+    )
     driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys(SHIPPING["full_name"])
     driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys(SHIPPING["address1"])
     driver.find_element(AppiumBy.ID, CITY_ID).send_keys(SHIPPING["city"])
@@ -72,6 +75,20 @@ def test_checkout_requires_login(driver):
     wait = go_to_shipping(driver)
     full_name = wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ID)))
     assert full_name.is_displayed()
+
+
+def test_shipping_required_fields(driver):
+    """배송지를 비우고 To Payment를 누르면 필수값 에러가 보이는지 확인"""
+    wait = go_to_shipping(driver)
+    wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ID)))
+    scroll_to_text(driver, "To Payment")
+    driver.find_element(AppiumBy.ID, TO_PAYMENT_ID).click()
+
+    # 에러 TextView는 처음엔 invisible일 수 있으므로 visibility로 기다림
+    error = wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ERROR_ID)))
+    assert error.text == MSG_FULL_NAME_REQUIRED
+    # 결제 정보 화면으로 넘어가지 않았는지도 확인
+    assert not driver.find_elements(AppiumBy.ID, CARD_NUMBER_ID)
 
 
 def test_shipping_to_payment(driver):

@@ -27,3 +27,4 @@ PAYMENT = {
 # 기대 메시지
 MSG_USERNAME_REQUIRED = "Username is required"
 MSG_LOCKED_OUT = "Sorry this user has been locked out."
+MSG_FULL_NAME_REQUIRED = "Please provide your full name."
