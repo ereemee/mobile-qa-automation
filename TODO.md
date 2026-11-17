@@ -21,14 +21,18 @@
 - [x] ruff format 오류 수정 (test_checkout.py), 배송지 입력 fill_shipping 헬퍼 분리
 - [x] 커밋 전 ruff 자동 실행 (pre-commit hook)
 - [x] 공통 locator(PKG, 로그인 id 등)를 한 곳으로 모으기 (test_login.py·test_checkout.py 중복)
+- [x] locator·테스트 데이터 분리
+- [x] 배송지 필수값 미입력 에러 메시지 검증
+- [x] README 실행 방법 코드 블록 깨짐 수정 (보이지 않는 문자 제거)
 
 ## 다음 할 일
-- [ ] 배송지 필수값 미입력 에러 메시지 검증
 - [ ] 로그인 상태로 결제 진입 시 로그인 화면 없이 배송지로 이동하는지 검증
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
-- [ ] locator·테스트 데이터 분리
 - [ ] pytest-html 리포트 생성
 - [ ] 실패 스크린샷을 pytest-html 리포트에 첨부
 - [ ] AWS Device Farm 등 클라우드 디바이스 팜 연동 검토
 - [ ] 결제 정보 필수값 미입력(카드 번호 등) 에러 메시지 검증
 - [ ] go_to_shipping·fill_shipping 헬퍼를 pages/ 로 옮기기 (POM 리팩터링 첫 단계)
+- [ ] 배송지 필드별(이름·주소·도시·우편번호·국가) 하나씩 비웠을 때 에러 검증 (pytest.mark.parametrize)
+- [ ] 로그인 실패(빈 비밀번호) 에러 메시지 검증
+- [ ] 에러 메시지 확인 공통 헬퍼 만들기 (POM 리팩터링 때 pages/로 이동)

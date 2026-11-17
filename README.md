@@ -7,13 +7,13 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 ## 기술 스택
 | 구분 | 사용 기술 |
 | --- | --- |
-| 언어 | Python 3.12 이상 |
+| 언어 | Python 3.12 이상 (`.python-version`) |
 | 테스트 프레임워크 | pytest |
 | 모바일 자동화 | Appium + UiAutomator2 driver, Appium-Python-Client |
 | 대기 처리 | Selenium `WebDriverWait` + `expected_conditions` (명시적 대기) |
 | 테스트 대상 | Sauce Labs My Demo App (`com.saucelabs.mydemoapp.android`) |
 | 실행 환경 | Windows, PowerShell, Android Emulator (`emulator-5554`) |
-| 코드 품질 / CI | ruff (lint·포맷 검사), GitHub Actions |
+| 코드 품질 / CI | ruff (lint·포맷 검사), GitHub Actions, pre-commit hook |
 
 ## 테스트 범위
 | 테스트 | 검증 내용 |
@@ -23,13 +23,16 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | `test_add_to_cart` | 상품을 장바구니에 담으면 장바구니 뱃지 숫자가 담기 전보다 1 늘어나는지 확인 |
 | `test_login_success` | 메뉴 → Log In 화면에서 올바른 계정으로 로그인하면 상품 목록 화면으로 이동하는지 확인 |
 | `test_login_empty_username` | 아이디 없이 Login을 누르면 "Username is required" 에러 메시지가 보이는지 확인 |
-| `test_checkout_requires_login` | 비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인 |
 | `test_login_locked_account` | 잠긴 계정으로 로그인하면 "Sorry this user has been locked out." 에러 메시지가 보이는지 확인 |
 | `test_login_state_resets_after_restart` | 로그인 후 앱을 재시작하면 로그아웃 상태(메뉴에 Log In 표시)로 돌아오는지 확인 |
+| `test_checkout_requires_login` | 비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인 |
+| `test_shipping_required_fields` | 배송지를 비워 두고 To Payment를 누르면 필수값 에러 메시지가 보이고 결제 화면으로 넘어가지 않는지 확인 |
 | `test_shipping_to_payment` | 로그인 후 배송지를 입력하고 To Payment를 누르면 결제 정보(카드 번호 입력) 화면으로 이동하는지 확인 |
 | `test_checkout_complete` | 배송지·결제 정보를 입력하고 Review Order → Place Order를 누르면 Checkout Complete 화면이 보이는지 확인 |
 
-모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 올 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
+모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 오고 상품 목록이 나타날 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
+
+화면 요소의 resource-id는 `locators.py`, 테스트 계정·배송지·결제 정보·기대 메시지는 `testdata.py`에 모아 두었습니다. 테스트 파일에는 흐름과 검증만 남겨, 앱 화면이나 데이터가 바뀌어도 한 곳만 고치면 됩니다. (계정은 데모 앱이 공개한 테스트 계정, 결제 정보는 더미 값입니다.)
 
 테스트가 실패하면 `conftest.py`의 `pytest_runtest_makereport` hook이 그 순간의 에뮬레이터 화면을 캡처해 `screenshots/테스트이름_날짜시간.png`로 저장합니다. (`screenshots/`는 `.gitignore`로 커밋에서 제외)
 
@@ -48,7 +51,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
    ```
 
 ## 실행 방법
-​```powershell
+```powershell
 # 1) Appium 서버 실행 (별도 PowerShell 창, 기본 주소 http://127.0.0.1:4723)
 appium
 
@@ -56,7 +59,8 @@ appium
 cd mobile-qa-automation
 python -m pytest
 
-# 특정 테스트만 실행
+# 특정 파일 / 특정 테스트만 실행
+python -m pytest tests/test_checkout.py
 python -m pytest tests/test_app.py::test_add_to_cart
 
 # 다른 에뮬레이터/기기, 다른 Appium 포트에서 실행할 때
@@ -67,13 +71,13 @@ python -m pytest
 
 # 환경변수를 지워서 기본값으로 되돌리기
 Remove-Item Env:DEVICE_NAME, Env:APPIUM_SERVER
-​```
-> `pytest.ini`에 `testpaths = tests`, `addopts = -v`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행됩니다.
+```
+> `pytest.ini`에 `testpaths = tests`, `pythonpath = .`, `addopts = -v`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행되고, 테스트에서 `locators`·`testdata`를 바로 import할 수 있습니다.
 > 환경변수 `DEVICE_NAME`, `APPIUM_SERVER`를 지정하지 않으면 기본값(`emulator-5554`, `http://127.0.0.1:4723`)으로 실행됩니다.
 > Appium Inspector 세션이 열려 있으면 테스트 세션과 충돌하므로, 실행 전에 Inspector 세션을 닫아 주세요.
 
 ## 코드 품질 (lint / CI)
-`main` 브랜치에 push하거나 Pull Request를 만들면 GitHub Actions(`.github/workflows/lint.yml`)가 ruff로 lint와 포맷을 자동으로 검사합니다. Appium 테스트는 에뮬레이터가 필요하므로 CI에서는 정적 검사만 실행합니다.
+`main` 브랜치에 push하거나 Pull Request를 만들면 GitHub Actions(`.github/workflows/lint.yml`)가 ruff로 lint와 포맷을 자동으로 검사합니다. Python 버전은 `.python-version` 파일을 CI와 함께 사용합니다. Appium 테스트는 에뮬레이터가 필요하므로 CI에서는 정적 검사만 실행합니다.
 
 ```powershell
 # 개발용 도구 설치
@@ -87,36 +91,38 @@ python -m ruff format --check .
 python -m ruff format .
 python -m ruff check --fix .
 ```
-> 검사 규칙은 `ruff.toml`에 설정되어 있습니다. (`E`, `F`, `I` 규칙, 한 줄 최대 100자)
+> 검사 규칙은 `ruff.toml`에 설정되어 있습니다. (`E`, `F`, `I` 규칙, 한 줄 최대 100자, 대상 버전 py312)
 
 ### 커밋 전 자동 검사 (git hook)
 ```powershell
 git config core.hooksPath .githooks   # 최초 1회
 ```
 `git commit`을 하면 `.githooks/pre-commit`이 ruff check와 ruff format --check를 먼저 실행하고, 실패하면 커밋이 멈춥니다.
-   
+
 ## 폴더 구조
 ```
 mobile-qa-automation/
 ├── .github/
 │   └── workflows/
-│       └── lint.yml   # GitHub Actions: push·PR 시 ruff lint·포맷 검사
+│       └── lint.yml       # GitHub Actions: push·PR 시 ruff lint·포맷 검사
 ├── .githooks/
-│   ├── pre-commit # 커밋 전 ruff 검사 hook
-├── conftest.py        # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
-├── locators.py        # 공통 locator(resource-id) 모음
-├── pytest.ini         # pytest 설정 (testpaths, pythonpath, -v)
-├── ruff.toml          # ruff 검사 규칙 설정
-├── requirements.txt   # Python 의존성 (버전 고정)
-├── requirements-dev.txt # 개발용 도구 (ruff, 버전 고정)
+│   └── pre-commit         # 커밋 전 ruff 검사 hook
 ├── tests/
-│   ├── test_app.py      # 앱 실행 / 상품 상세 / 장바구니 테스트
-│   ├── test_login.py    # 로그인 성공 / 실패 / 잠금 계정 / 재시작 테스트
-│   └── test_checkout.py # 결제 흐름 테스트 (로그인 → 배송지 → 결제 정보 → 주문 완료)
+│   ├── test_app.py        # 앱 실행 / 상품 상세 / 장바구니 테스트
+│   ├── test_login.py      # 로그인 성공 / 실패 / 잠금 계정 / 재시작 테스트
+│   └── test_checkout.py   # 결제 흐름 테스트 (로그인 → 배송지 → 결제 정보 → 주문 완료, 배송지 필수값)
 ├── docs/
-│   └── images/        # README용 실행 결과 이미지
-├── screenshots/       # 테스트 실패 시 자동 생성 (git 제외)
-├── TODO.md            # 앞으로 할 일
+│   └── images/            # README용 실행 결과 이미지
+├── screenshots/           # 테스트 실패 시 자동 생성 (git 제외)
+├── conftest.py            # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
+├── locators.py            # 공통 locator(resource-id) 모음
+├── testdata.py            # 테스트 계정·배송지·결제 정보·기대 메시지
+├── pytest.ini             # pytest 설정 (testpaths, pythonpath, -v)
+├── ruff.toml              # ruff 검사 규칙 설정
+├── requirements.txt       # Python 의존성 (버전 고정)
+├── requirements-dev.txt   # 개발용 도구 (ruff, 버전 고정)
+├── .python-version        # Python 버전 (CI와 공유)
+├── TODO.md                # 앞으로 할 일
 └── README.md
 ```
 
@@ -150,4 +156,4 @@ mobile-qa-automation/
 - **해결**: 화면 이동은 에뮬레이터에서 직접 하고, pytest 실행 전에는 Inspector 세션을 닫음
 
 ## 앞으로 할 일
-[TODO.md](TODO.md) 참고 — 결제(Checkout) 흐름 테스트, 로그인 실패 케이스 확장, Page Object Model 리팩터링, locator·테스트 데이터 분리, pytest-html 리포트, 클라우드 디바이스 팜 연동 예정
+[TODO.md](TODO.md) 참고 — 결제 정보 필수값 검증, 로그인 상태 결제 진입 검증, Page Object Model 리팩터링(pages/), pytest-html 리포트와 실패 스크린샷 첨부, 클라우드 디바이스 팜(AWS Device Farm 등) 연동 검토 예정
