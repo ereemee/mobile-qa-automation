@@ -29,6 +29,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | `test_shipping_required_fields` | 배송지를 비워 두고 To Payment를 누르면 필수값 에러 메시지가 보이고 결제 화면으로 넘어가지 않는지 확인 |
 | `test_shipping_to_payment` | 로그인 후 배송지를 입력하고 To Payment를 누르면 결제 정보(카드 번호 입력) 화면으로 이동하는지 확인 |
 | `test_checkout_complete` | 배송지·결제 정보를 입력하고 Review Order → Place Order를 누르면 Checkout Complete 화면이 보이는지 확인 |
+| `test_checkout_when_logged_in` | 메뉴에서 먼저 로그인한 뒤 결제를 진행하면 로그인 화면 없이 바로 배송지 입력 화면으로 이동하는지 확인 |
 
 모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 오고 상품 목록이 나타날 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
 
@@ -156,4 +157,4 @@ mobile-qa-automation/
 - **해결**: 화면 이동은 에뮬레이터에서 직접 하고, pytest 실행 전에는 Inspector 세션을 닫음
 
 ## 앞으로 할 일
-[TODO.md](TODO.md) 참고 — 결제 정보 필수값 검증, 로그인 상태 결제 진입 검증, Page Object Model 리팩터링(pages/), pytest-html 리포트와 실패 스크린샷 첨부, 클라우드 디바이스 팜(AWS Device Farm 등) 연동 검토 예정
+[TODO.md](TODO.md) 참고 — 결제 정보 필수값 검증, Page Object Model 리팩터링(pages/), pytest-html 리포트와 실패 스크린샷 첨부, 클라우드 디바이스 팜(AWS Device Farm 등) 연동 검토 예정
