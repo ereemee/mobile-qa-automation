@@ -61,7 +61,6 @@ def fill_shipping(driver, wait):
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, FULL_NAME_ID))).send_keys(
         SHIPPING["full_name"]
     )
-    driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys(SHIPPING["full_name"])
     driver.find_element(AppiumBy.ID, ADDRESS1_ID).send_keys(SHIPPING["address1"])
     driver.find_element(AppiumBy.ID, CITY_ID).send_keys(SHIPPING["city"])
     driver.find_element(AppiumBy.ID, ZIP_ID).send_keys(SHIPPING["zip"])
