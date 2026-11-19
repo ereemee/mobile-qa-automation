@@ -24,9 +24,10 @@
 - [x] locator·테스트 데이터 분리
 - [x] 배송지 필수값 미입력 에러 메시지 검증
 - [x] README 실행 방법 코드 블록 깨짐 수정 (보이지 않는 문자 제거)
+- [x] 로그인 상태로 결제 진입 시 로그인 화면 없이 배송지로 이동하는지 검증
+- [x] fill_shipping 주소 입력란 이름 중복 입력 버그 수정 (testdata 적용 시 생긴 회귀)
 
 ## 다음 할 일
-- [ ] 로그인 상태로 결제 진입 시 로그인 화면 없이 배송지로 이동하는지 검증
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
 - [ ] pytest-html 리포트 생성
 - [ ] 실패 스크린샷을 pytest-html 리포트에 첨부
@@ -36,3 +37,5 @@
 - [ ] 배송지 필드별(이름·주소·도시·우편번호·국가) 하나씩 비웠을 때 에러 검증 (pytest.mark.parametrize)
 - [ ] 로그인 실패(빈 비밀번호) 에러 메시지 검증
 - [ ] 에러 메시지 확인 공통 헬퍼 만들기 (POM 리팩터링 때 pages/로 이동)
+- [ ] 입력한 배송지·결제 정보가 주문 확인(Review Order) 화면에 그대로 표시되는지 검증
+- [ ] 메뉴 로그인 헬퍼 중복 정리 (test_login.py의 open_login_screen·login ↔ test_checkout.py의 login_from_menu)
