@@ -2,7 +2,7 @@ from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from conftest import APP_PACKAGE
+from conftest import restart_app
 from locators import (
     LOGIN_BTN_ID,
     MENU_ID,
@@ -62,8 +62,7 @@ def test_login_state_resets_after_restart(driver):
     wait = open_login_screen(driver)
     login(driver, wait, VALID_USER["username"], VALID_USER["password"])
     wait.until(EC.presence_of_all_elements_located((AppiumBy.ID, PRODUCT_ID)))
-    driver.terminate_app(APP_PACKAGE)
-    driver.activate_app(APP_PACKAGE)
+    restart_app(driver)  # 재시작 후 첫 화면이 뜰 때까지 기다림
     wait.until(EC.element_to_be_clickable((AppiumBy.ID, MENU_ID))).click()
     log_in = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("Log In")')
     assert wait.until(EC.visibility_of_element_located(log_in))

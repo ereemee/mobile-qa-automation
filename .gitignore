@@ -221,3 +221,6 @@ __marimo__/
 
 # 테스트 실패 스크린샷
 screenshots/
+
+# pytest-html 리포트
+reports/

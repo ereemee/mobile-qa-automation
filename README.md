@@ -76,6 +76,7 @@ Remove-Item Env:DEVICE_NAME, Env:APPIUM_SERVER
 > `pytest.ini`에 `testpaths = tests`, `pythonpath = .`, `addopts = -v`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행되고, 테스트에서 `locators`·`testdata`를 바로 import할 수 있습니다.
 > 환경변수 `DEVICE_NAME`, `APPIUM_SERVER`를 지정하지 않으면 기본값(`emulator-5554`, `http://127.0.0.1:4723`)으로 실행됩니다.
 > Appium Inspector 세션이 열려 있으면 테스트 세션과 충돌하므로, 실행 전에 Inspector 세션을 닫아 주세요.
+> 실행이 끝나면 reports/report.html에 HTML 리포트가 생성되고, 실패한 테스트에는 그 순간의 화면이 첨부됩니다. (start reports\report.html)
 
 ## 코드 품질 (lint / CI)
 `main` 브랜치에 push하거나 Pull Request를 만들면 GitHub Actions(`.github/workflows/lint.yml`)가 ruff로 lint와 포맷을 자동으로 검사합니다. Python 버전은 `.python-version` 파일을 CI와 함께 사용합니다. Appium 테스트는 에뮬레이터가 필요하므로 CI에서는 정적 검사만 실행합니다.
@@ -115,6 +116,7 @@ mobile-qa-automation/
 ├── docs/
 │   └── images/            # README용 실행 결과 이미지
 ├── screenshots/           # 테스트 실패 시 자동 생성 (git 제외)
+├── reports/               # pytest-html 리포트 (git 제외)
 ├── conftest.py            # driver fixture (capability 설정, 앱 재시작·대기, 세션 종료), 실패 시 스크린샷 hook
 ├── locators.py            # 공통 locator(resource-id) 모음
 ├── testdata.py            # 테스트 계정·배송지·결제 정보·기대 메시지
@@ -129,6 +131,7 @@ mobile-qa-automation/
 
 ## 실행 결과
 ![pytest 실행 결과](docs/images/pytest-result.png)
+![pytest-html 리포트](docs/images/pytest-html-report.png)
 
 ## 트러블슈팅
 ### 1. PowerShell에서 `pytest` 명령을 인식하지 못함

@@ -1,3 +1,4 @@
 Appium-Python-Client==6.0.12
 pytest==9.2.0
 selenium==4.52.0
+pytest-html==4.2.0
