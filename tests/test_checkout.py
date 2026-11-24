@@ -17,14 +17,12 @@ from locators import (
     FULL_NAME_ERROR_ID,
     FULL_NAME_ID,
     LOGIN_BTN_ID,
-    MENU_ID,
-    PASSWORD_ID,
     PROCEED_ID,
     PRODUCT_ID,
     TO_PAYMENT_ID,
-    USERNAME_ID,
     ZIP_ID,
 )
+from pages.login_page import LoginPage
 from testdata import MSG_FULL_NAME_REQUIRED, PAYMENT, SHIPPING, VALID_USER
 
 
@@ -44,10 +42,7 @@ def add_to_cart_and_checkout(driver):
 def go_to_shipping(driver):
     """비로그인 상태로 결제를 진행하고, 나타난 로그인 화면에서 로그인까지 한다"""
     wait = add_to_cart_and_checkout(driver)
-    username = wait.until(EC.element_to_be_clickable((AppiumBy.ID, USERNAME_ID)))
-    username.send_keys(VALID_USER["username"])
-    driver.find_element(AppiumBy.ID, PASSWORD_ID).send_keys(VALID_USER["password"])
-    driver.find_element(AppiumBy.ID, LOGIN_BTN_ID).click()
+    LoginPage(driver).login(VALID_USER["username"], VALID_USER["password"])
     return wait
 
 
@@ -75,19 +70,6 @@ def fill_shipping(driver, wait):
     driver.find_element(AppiumBy.ID, TO_PAYMENT_ID).click()
 
 
-def login_from_menu(driver, wait):
-    """메뉴 → Log In으로 로그인하고 상품 목록으로 돌아올 때까지 기다린다"""
-    wait.until(EC.element_to_be_clickable((AppiumBy.ID, MENU_ID))).click()
-    log_in = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("Log In")')
-    wait.until(EC.element_to_be_clickable(log_in)).click()
-    wait.until(EC.element_to_be_clickable((AppiumBy.ID, USERNAME_ID))).send_keys(
-        VALID_USER["username"]
-    )
-    driver.find_element(AppiumBy.ID, PASSWORD_ID).send_keys(VALID_USER["password"])
-    driver.find_element(AppiumBy.ID, LOGIN_BTN_ID).click()
-    wait.until(EC.presence_of_all_elements_located((AppiumBy.ID, PRODUCT_ID)))
-
-
 def test_checkout_requires_login(driver):
     """비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인"""
     wait = go_to_shipping(driver)
@@ -97,10 +79,10 @@ def test_checkout_requires_login(driver):
 
 def test_checkout_when_logged_in(driver):
     """로그인 상태로 결제를 진행하면 로그인 화면 없이 배송지 입력 화면으로 이동하는지 확인"""
-    wait = WebDriverWait(driver, 10)
-    login_from_menu(driver, wait)
-    add_to_cart_and_checkout(driver)
-
+    page = LoginPage(driver).open_from_menu()
+    page.login(VALID_USER["username"], VALID_USER["password"])
+    page.wait_for_product_list()
+    wait = add_to_cart_and_checkout(driver)
     full_name = wait.until(EC.visibility_of_element_located((AppiumBy.ID, FULL_NAME_ID)))
     assert full_name.is_displayed()
     # 로그인 화면을 거치지 않았는지 확인

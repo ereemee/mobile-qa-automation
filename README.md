@@ -73,7 +73,7 @@ python -m pytest
 # 환경변수를 지워서 기본값으로 되돌리기
 Remove-Item Env:DEVICE_NAME, Env:APPIUM_SERVER
 ```
-> `pytest.ini`에 `testpaths = tests`, `pythonpath = .`, `addopts = -v`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행되고, 테스트에서 `locators`·`testdata`를 바로 import할 수 있습니다.
+> `pytest.ini`에 `testpaths = tests`, `pythonpath = .`, `addopts = -v --html=reports/report.html --self-contained-html`가 설정되어 있어서 `tests/` 폴더의 테스트가 상세 모드로 실행되고, 테스트에서 `locators`·`testdata`를 바로 import할 수 있습니다.
 > 환경변수 `DEVICE_NAME`, `APPIUM_SERVER`를 지정하지 않으면 기본값(`emulator-5554`, `http://127.0.0.1:4723`)으로 실행됩니다.
 > Appium Inspector 세션이 열려 있으면 테스트 세션과 충돌하므로, 실행 전에 Inspector 세션을 닫아 주세요.
 > 실행이 끝나면 reports/report.html에 HTML 리포트가 생성되고, 실패한 테스트에는 그 순간의 화면이 첨부됩니다. (start reports\report.html)
@@ -109,6 +109,8 @@ mobile-qa-automation/
 │       └── lint.yml       # GitHub Actions: push·PR 시 ruff lint·포맷 검사
 ├── .githooks/
 │   └── pre-commit         # 커밋 전 ruff 검사 hook
+├── pages/
+│   └── login_page.py      # 로그인 화면 Page Object (메뉴 이동·로그인·에러 메시지)
 ├── tests/
 │   ├── test_app.py        # 앱 실행 / 상품 상세 / 장바구니 테스트
 │   ├── test_login.py      # 로그인 성공 / 실패 / 잠금 계정 / 재시작 테스트
@@ -160,4 +162,4 @@ mobile-qa-automation/
 - **해결**: 화면 이동은 에뮬레이터에서 직접 하고, pytest 실행 전에는 Inspector 세션을 닫음
 
 ## 앞으로 할 일
-[TODO.md](TODO.md) 참고 — 결제 정보 필수값 검증, Page Object Model 리팩터링(pages/), pytest-html 리포트와 실패 스크린샷 첨부, 클라우드 디바이스 팜(AWS Device Farm 등) 연동 검토 예정
+[TODO.md](TODO.md) 참고 — 결제 정보 필수값 검증, Page Object Model 리팩터링(pages/), 클라우드 디바이스 팜(AWS Device Farm 등) 연동 검토 예정
