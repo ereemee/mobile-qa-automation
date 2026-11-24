@@ -23,6 +23,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | `test_add_to_cart` | 상품을 장바구니에 담으면 장바구니 뱃지 숫자가 담기 전보다 1 늘어나는지 확인 |
 | `test_login_success` | 메뉴 → Log In 화면에서 올바른 계정으로 로그인하면 상품 목록 화면으로 이동하는지 확인 |
 | `test_login_empty_username` | 아이디 없이 Login을 누르면 "Username is required" 에러 메시지가 보이는지 확인 |
+| `test_login_empty_password` | 비밀번호 없이 Login을 누르면 비밀번호 필수 에러 메시지가 보이는지 확인 |
 | `test_login_locked_account` | 잠긴 계정으로 로그인하면 "Sorry this user has been locked out." 에러 메시지가 보이는지 확인 |
 | `test_login_state_resets_after_restart` | 로그인 후 앱을 재시작하면 로그아웃 상태(메뉴에 Log In 표시)로 돌아오는지 확인 |
 | `test_checkout_requires_login` | 비로그인 상태로 결제를 진행하면 로그인 후 배송지 입력 화면으로 이동하는지 확인 |

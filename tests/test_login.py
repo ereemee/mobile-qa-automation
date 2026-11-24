@@ -1,7 +1,7 @@
 from conftest import restart_app
 from locators import NAME_ERROR_ID, PASSWORD_ERROR_ID
 from pages.login_page import LoginPage
-from testdata import LOCKED_USER, MSG_LOCKED_OUT, MSG_USERNAME_REQUIRED, VALID_USER
+from testdata import LOCKED_USER, MSG_LOCKED_OUT, MSG_USERNAME_REQUIRED, VALID_USER, MSG_PASSWORD_REQUIRED
 
 
 def test_login_success(driver):
@@ -16,6 +16,13 @@ def test_login_empty_username(driver):
     page = LoginPage(driver).open_from_menu()
     page.tap_login()
     assert page.error_text(NAME_ERROR_ID) == MSG_USERNAME_REQUIRED
+
+
+def test_login_empty_password(driver):
+    """비밀번호 없이 로그인하면 비밀번호 필수 에러 메시지가 보이는지 확인"""
+    page = LoginPage(driver).open_from_menu()
+    page.login(VALID_USER["username"], "")
+    assert page.error_text(PASSWORD_ERROR_ID) == MSG_PASSWORD_REQUIRED
 
 
 def test_login_locked_account(driver):
