@@ -1,7 +1,13 @@
 from conftest import restart_app
 from locators import NAME_ERROR_ID, PASSWORD_ERROR_ID
 from pages.login_page import LoginPage
-from testdata import LOCKED_USER, MSG_LOCKED_OUT, MSG_USERNAME_REQUIRED, VALID_USER, MSG_PASSWORD_REQUIRED
+from testdata import (
+    LOCKED_USER,
+    MSG_LOCKED_OUT,
+    MSG_PASSWORD_REQUIRED,
+    MSG_USERNAME_REQUIRED,
+    VALID_USER,
+)
 
 
 def test_login_success(driver):

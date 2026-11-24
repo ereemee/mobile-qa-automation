@@ -30,6 +30,10 @@
 - [x] 실패 스크린샷을 pytest-html 리포트에 첨부 (screenshots/ 저장과 같은 화면)
 - [x] 앱 재시작·대기를 restart_app 헬퍼로 분리 (fixture와 재시작 테스트가 함께 사용)
 - [x] AccessibilityNodeInfo 타임아웃 시 상품 목록 대기 재시도 (ignored_exceptions)
+- [x] LoginPage(pages/login_page.py) 추가로 POM 첫 단계
+- [x] 메뉴 로그인 헬퍼 중복 정리 (open_login_screen·login ↔ login_from_menu → LoginPage)
+- [x] 로그인 실패(빈 비밀번호) 에러 메시지 검증
+- [x] README에 pytest-html 리포트 실행 방법·캡처 이미지 추가
 
 ## 다음 할 일
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
@@ -42,5 +46,5 @@
 - [ ] 입력한 배송지·결제 정보가 주문 확인(Review Order) 화면에 그대로 표시되는지 검증
 - [ ] 메뉴 로그인 헬퍼 중복 정리 (test_login.py의 open_login_screen·login ↔ test_checkout.py의 login_from_menu)
 - [ ] README 트러블슈팅 추가 (재시작 테스트 메뉴 TimeoutException, fixture AccessibilityNodeInfo 타임아웃)
-- [ ] README에 pytest-html 리포트 실행 방법·캡처 이미지 추가
-- [ ] LoginPage(pages/login_page.py) 추가로 POM 첫 단계 
+- [ ] CheckoutPage(pages/checkout_page.py)로 add_to_cart_and_checkout·go_to_shipping·fill_shipping 옮기기
+- [ ] 상품 목록·장바구니 Page Object(pages/products_page.py) 추가 (test_app.py get_cart_count 이동)
