@@ -111,7 +111,9 @@ mobile-qa-automation/
 ├── .githooks/
 │   └── pre-commit         # 커밋 전 ruff 검사 hook
 ├── pages/
-│   └── login_page.py      # 로그인 화면 Page Object (메뉴 이동·로그인·에러 메시지)
+│   ├── login_page.py      # 로그인 화면 Page Object (메뉴 이동·로그인·에러 메시지)
+│   ├── login_page.py      # 로그인 화면 Page Object (메뉴 이동·로그인·에러 메시지)
+│   └── checkout_page.py   # 결제 흐름 Page Object (장바구니 → 배송지 → 결제 정보 → 주문)
 ├── tests/
 │   ├── test_app.py        # 앱 실행 / 상품 상세 / 장바구니 테스트
 │   ├── test_login.py      # 로그인 성공 / 실패 / 잠금 계정 / 재시작 테스트
