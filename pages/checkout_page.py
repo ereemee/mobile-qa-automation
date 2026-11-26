@@ -25,7 +25,6 @@ from locators import (
     TO_PAYMENT_ID,
     ZIP_ID,
 )
-
 from testdata import PAYMENT, SHIPPING
 
 PLACE_ORDER = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("Place Order")')
