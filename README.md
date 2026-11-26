@@ -31,6 +31,7 @@ Python + pytest + Appium(UiAutomator2)으로 Sauce Labs 데모 앱(Android)의 �
 | `test_shipping_to_payment` | 로그인 후 배송지를 입력하고 To Payment를 누르면 결제 정보(카드 번호 입력) 화면으로 이동하는지 확인 |
 | `test_checkout_complete` | 배송지·결제 정보를 입력하고 Review Order → Place Order를 누르면 Checkout Complete 화면이 보이는지 확인 |
 | `test_checkout_when_logged_in` | 메뉴에서 먼저 로그인한 뒤 결제를 진행하면 로그인 화면 없이 바로 배송지 입력 화면으로 이동하는지 확인 |
+| `test_payment_required_fields` | 결제 정보에서 카드 번호를 비우고 Review Order를 누르면 주문 확인(Place Order) 화면으로 넘어가지 않고 결제 정보 화면에 남는지 확인 (앱은 에러 문구 없이 입력란 테두리만 빨갛게 표시) |
 
 모든 테스트는 `conftest.py`의 `driver` fixture를 사용합니다. 테스트마다 앱을 종료(`terminate_app`)했다가 다시 실행(`activate_app`)하고, 앱이 화면 맨 앞에 오고 상품 목록이 나타날 때까지 기다린 뒤 시작합니다. 그래서 각 테스트가 항상 첫 화면(상품 목록)에서 독립적으로 실행됩니다.
 

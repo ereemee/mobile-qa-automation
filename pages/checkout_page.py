@@ -4,6 +4,7 @@
 """
 
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -90,6 +91,11 @@ class CheckoutPage:
         self.driver.find_element(AppiumBy.ID, CVV_ID).send_keys(payment["cvv"])
         return self
 
+    def tap_review_order(self):
+        """Review Order 버튼만 누른다 (필수값 검증용)"""
+        self.scroll_to_text("Review Order").click()
+        return self
+    
     def place_order(self):
         self.scroll_to_text("Review Order").click()
         self.wait.until(EC.element_to_be_clickable(PLACE_ORDER)).click()
@@ -100,3 +106,11 @@ class CheckoutPage:
 
     def is_checkout_complete(self):
         return self.wait.until(EC.visibility_of_element_located(CHECKOUT_COMPLETE)).is_displayed()
+
+    def is_review_order_shown(self, timeout=3):
+        """Place Order 버튼(주문 확인 화면)이 timeout초 안에 나타나면 True"""
+        try:
+            WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(PLACE_ORDER))
+            return True
+        except TimeoutException:
+            return False
