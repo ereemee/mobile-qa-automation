@@ -35,13 +35,17 @@
 - [x] 로그인 실패(빈 비밀번호) 에러 메시지 검증
 - [x] README에 pytest-html 리포트 실행 방법·캡처 이미지 추가
 - [x] CheckoutPage(pages/checkout_page.py)로 add_to_cart_and_checkout·go_to_shipping·fill_shipping 옮기기
+- [x] checkout_page.py import 정렬 오류(ruff I001) 수정 — CI lint 복구
+- [x] 결제 정보 필수값 미입력(카드 번호) 검증 — 에러 문구가 없어서 주문 확인 화면으로 넘어가지 않는지로 검증
+- [x] ruff format 오류 수정 (checkout_page.py 공백 줄·파일 끝 줄바꿈)
 
 ## 다음 할 일
 - [ ] Page Object Model 구조로 리팩터링 (pages/ 폴더)
 - [ ] AWS Device Farm 등 클라우드 디바이스 팜 연동 검토
-- [ ] 결제 정보 필수값 미입력(카드 번호 등) 에러 메시지 검증
 - [ ] 배송지 필드별(이름·주소·도시·우편번호·국가) 하나씩 비웠을 때 에러 검증 (pytest.mark.parametrize)
 - [ ] 에러 메시지 확인 공통 헬퍼 만들기 (POM 리팩터링 때 pages/로 이동)
 - [ ] 입력한 배송지·결제 정보가 주문 확인(Review Order) 화면에 그대로 표시되는지 검증
 - [ ] README 트러블슈팅 추가 (재시작 테스트 메뉴 TimeoutException, fixture AccessibilityNodeInfo 타임아웃)
 - [ ] 상품 목록·장바구니 Page Object(pages/products_page.py) 추가 (test_app.py get_cart_count 이동)
+- [ ] 결제 정보 필드별(이름·카드 번호·유효기간·CVV) 하나씩 비웠을 때 에러 검증 (pytest.mark.parametrize)
+- [ ] LoginPage·CheckoutPage의 중복 error_text·wait를 BasePage(pages/base_page.py)로 합치기

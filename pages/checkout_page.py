@@ -95,7 +95,7 @@ class CheckoutPage:
         """Review Order 버튼만 누른다 (필수값 검증용)"""
         self.scroll_to_text("Review Order").click()
         return self
-    
+
     def place_order(self):
         self.scroll_to_text("Review Order").click()
         self.wait.until(EC.element_to_be_clickable(PLACE_ORDER)).click()
